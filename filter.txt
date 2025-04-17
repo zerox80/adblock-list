@@ -1,208 +1,204 @@
-! Brave Custom Filter List - Popular Ad & Tracking Domains
-! Version 1.0
-! Fokus: Bekannte Third-Party-Domains für Werbung und Tracking.
-! Nicht als Ersatz für Standardlisten (EasyList, EasyPrivacy) gedacht, sondern als Ergänzung.
+! Title: Custom Filter List based on DuckDuckGo Tracker Radar (Top ~200 Ad/Tracking Domains, No CDNs)
+! Description: Blocks popular advertising and tracking domains, attempts to avoid breaking sites and excludes major CDNs.
+! Source: Inspired by DuckDuckGo Tracker Radar data
+! Last Updated: 2025-04-17
 
 ||doubleclick.net^
 ||google-analytics.com^
 ||googlesyndication.com^
+||googletagservices.com^
 ||googleadservices.com^
 ||adservice.google.com^
+||youtube.com^$domain=~youtube.com|~youtubekids.com  ! Block YT tracking outside of YT itself
+||facebook.net^
+||facebook.com^$domain=~facebook.com|~instagram.com  ! Block FB tracking outside of FB/IG
 ||connect.facebook.net^
-||facebook.com^$third-party
-||ads.facebook.com^
-||analytics.facebook.com^
-||amazon-adsystem.com^
-||aaxads.com^
-||scorecardresearch.com^
-||quantserve.com^
-||crwdcntrl.net^
+||analytics.yahoo.com^
+||ads.yahoo.com^
+||advertising.com^
+|| casalemedia.com^
+|| scorecardresearch.com^
+||krxd.net^
 ||adnxs.com^
-||criteo.com^
-||criteo.net^
-||pubmatic.com^
+||quantserve.com^
 ||rubiconproject.com^
 ||openx.net^
-||adsrvr.org^
-||adform.net^
-||mathtag.com^
-||bidswitch.net^
-||rlcdn.com^
-||tapad.com^
-||demdex.net^
-||omtrdc.net^
-||adobedtm.com^
-||everesttech.net^
-||bluekai.com^
-||addthis.com^
-||sharethrough.com^
-||taboola.com^
-||outbrain.com^
-||ads-twitter.com^
-||t.co^$third-party
-||ads.linkedin.com^
-||px.ads.linkedin.com^
-||ads.youtube.com^
-||analytics.tiktok.com^
-||ads.tiktok.com^
-||ads.bing.com^
-||bat.bing.com^
-||advertising.com^
-||yieldmo.com^
-||contextweb.com^
-||casalemedia.com^
-||googletagmanager.com^
-||googletagservices.com^
-||adroll.com^
-||agkn.com^
+||pubmatic.com^
 ||lijit.com^
-||nexac.com^
-||imrworldwide.com^
-||tremorhub.com^
-||flashtalking.com^
 ||turn.com^
+||agkn.com^
+||bidswitch.net^
+||mathtag.com^
+||adroll.com^
+||rlcdn.com^ ! Often associated with AdRoll/NextRoll
+||tapad.com^
+||demdex.net^ ! Adobe Audience Manager
+||everesttech.net^ ! Adobe Advertising Cloud
+||omtrdc.net^ ! Adobe Analytics (SiteCatalyst)
+||2o7.net^ ! Adobe Analytics (SiteCatalyst)
+||adobedtm.com^ ! Adobe Dynamic Tag Management
+||amazon-adsystem.com^
+||aaxads.com^
 ||media.net^
-||narrative.io^
-||narrative.so^
-||semasio.net^
-||simpli.fi^
-||thetradedesk.com^
-||dotomi.com^
-||owneriq.net^
-||exelator.com^
-||neustar.biz^
-|| Neustar (ehem. Aggregate Knowledge)
-||liveramp.com^
-||acxiom.com^
-||epsilon.com^
-||experian.com^
-|| casalemedia.com^
-|| indexexchange.com^
-|| districtm.io^
-|| casalemedia.com^
-||yieldlab.net^
-||smartadserver.com^
-||revcontent.com^
-||mgid.com^
-||zemanta.com^
+||criteo.com^
+||criteo.net^
+||disqus.com^ ! Often used for tracking beyond comments
+||addthis.com^
+||sharethis.com^
+||outbrain.com^
+||taboola.com^
+||yieldmo.com^
 ||spotxchange.com^
-||spotx.tv^
-||undertone.com^
-||advertising.yahoo.com^
-||ads.yahoo.com^
-||adtech.com^
-||adtech.de^
-||adtechus.com^
-||brightroll.com^
-||tremorvideo.com^
-||videohub.tv^
-||adap.tv^
-||acuityplatform.com^
-||adition.com^
-||adition.net^
-||adspirit.de^
-||ipredictive.com^
-||adsnative.com^
-||appnexus.com^
-||bidr.io^
-||bounceexchange.com^
-||bttrack.com^
+||contextweb.com^
+||imrworldwide.com^ ! Nielsen
+||scorecardresearch.com^ ! Comscore
+||voicefive.com^ ! Comscore
+||nr-data.net^ ! New Relic (Primarily APM, but can collect user data)
+||amplitude.com^
+||mixpanel.com^
+||heapanalytics.com^
+||optimizely.com^ ! A/B Testing, often involves tracking
+||hotjar.com^
+||crazyegg.com^
+||mouseflow.com^
+||fullstory.com^
+||inspectlet.com^
+||clicktale.net^
 ||chartbeat.com^
 ||chartbeat.net^
-||clicksor.net^
-||clixsense.com^
-||conversantmedia.com^
-||coremetrics.com^
-||crazyegg.com^
-||cxense.com^
-||disqusads.com^
-||effectivemeasure.net^
-||ensighten.com^
-||exoclick.com^
-||eyeblaster.com^
-||eyeviewads.com^
-||forter.com^
-||gemius.pl^
-||gfk.com^
-||gstaticadssl.l.google.com^
-||hotjar.com^
-||hubspot.com^$third-party
-||ib-ibi.com^
-||igodigital.com^
-||infusionsoft.com^$third-party
-||integralads.com^
-||intercom.io^$third-party
-||ixiaa.com^
-||jsdelivr.net^$third-party,script
-||kissmetrics.com^
-||krxd.net^
-||ligatus.com^
-||linkpulse.com^
-||liveintent.com^
-||liveperson.net^
-||marketo.com^$third-party
-||marketingcloud.com^
-||mediavine.com^
-||mediamath.com^
-||mentionme.com^
-||metricstream.com^
-||mixpanel.com^
-||moatads.com^
-||monetate.net^
-||mouseflow.com^
-||netmng.com^
-||newrelic.com^$third-party
-||nr-data.net^
-||optimizely.com^
-||pardot.com^
 ||parsely.com^
-||perimeterx.net^
-||pippio.com^
-||popads.net^
-||postaffiliatepro.com^
-||qualtrics.com^$third-party
-||quantcast.com^
-||rakutenadvertising.com^
-||responsys.net^
-||rfihub.com^
-||sail-horizon.com^
-||sailthru.com^
-||salesforce.com^$third-party
-||scribol.com^
-||segment.com^
+||segment.com^ ! Customer Data Platform, often involves tracking
 ||segment.io^
-||serving-sys.com^
-||shareaholic.com^
-||signal.co^
-||skimresources.com^
-||sociomantic.com^
-||steelhouse.com^
-||sumo.com^
-||sumome.com^
-||svonm.com^
-||syndication.twitter.com^
-||tagcommander.com^
+||mparticle.com^
 ||tealium.com^
-||tiqcdn.com^
-||tribalfusion.com^
-||trustarc.com^
-||ugdturn.com^
-||unpkg.com^$third-party,script
-||viglink.com^
-||visualwebsiteoptimizer.com^
-||vwo.com^
-||webengage.com^
+||tiqcdn.com^ ! Tealium iQ Tag Management
+||ensighten.com^
+||googletagmanager.com^ ! Often loads other trackers
+||linkedin.com^$domain=~linkedin.com ! Block LinkedIn tracking outside of LinkedIn
+||ads.linkedin.com^
+||licdn.com^$domain=~linkedin.com ! Block LinkedIn CDN elements outside of LinkedIn
+||pinterest.com^$domain=~pinterest.com ! Block Pinterest tracking outside of Pinterest
+||ads.pinterest.com^
+||pinimg.com^$domain=~pinterest.com ! Block Pinterest CDN elements outside of Pinterest
+||twitter.com^$domain=~twitter.com ! Block Twitter tracking outside of Twitter
+||ads-twitter.com^
+||twimg.com^$domain=~twitter.com ! Block Twitter CDN elements outside of Twitter
+||platform.twitter.com^
+||tiktok.com^$domain=~tiktok.com ! Block TikTok tracking outside of TikTok
+||tiktokcdn.com^$domain=~tiktok.com ! Block TikTok CDN elements outside of TikTok
+||reddit.com^$domain=~reddit.com ! Block Reddit tracking outside of Reddit
+||redditstatic.com^$domain=~reddit.com ! Block Reddit CDN elements outside of Reddit
+||ads.reddit.com^
+||snapchat.com^$domain=~snapchat.com ! Block Snapchat tracking outside of Snapchat
+||snapads.com^
+||sc-static.net^$domain=~snapchat.com ! Block Snapchat CDN elements outside of Snapchat
+||bing.com^$domain=~bing.com ! Block Bing tracking outside of Bing
+||bat.bing.com^
+||ads.microsoft.com^
+||flashtalking.com^
+||sizmek.com^
+||mediamath.com^
+||rkdms.com^ ! Rakuten
+||bounceexchange.com^ ! BounceX / Wonderkind
+||bluekai.com^ ! Oracle Data Cloud
+||bkrtx.com^ ! Oracle Data Cloud / Bluekai
+||narrative.io^
+||neustar.biz^ ! Neustar/Fabrick
+||agkn.com^ ! Neustar/Aggregate Knowledge
+||myvisualiq.net^ ! Neustar/Nielsen VisualIQ
+||exelator.com^ ! Nielsen Marketing Cloud
+||semasio.net^
+||adform.net^
+||adformdsp.net^
+||eyeota.net^
+||e Klink.com^ ! Epsilon
+||conversantmedia.com^ ! Conversant/CJ Affiliate
+||dotomi.com^ ! Conversant
+||viglink.com^ ! Sovrn //Commerce
+||sovrn.com^
+||onetag-sys.com^
+||yieldlab.net^
+||smartadserver.com^
+||weborama.fr^
 ||weborama.com^
-||webtrekk.com^
-||webtrends.com^
-||wp.com^$third-party
-||wpmudev.com^$third-party
-||yandex.ru^$third-party
-||yadro.ru^
-||yieldify.com^
-||yimg.com^
-||yieldmanager.com^
-||yumenetworks.com^
-||zemanta.com^
-||zencdn.net^$third-party
-||zopim.com^
+||3lift.com^ ! TripleLift
+||id5-sync.com^ ! ID5 Universal ID
+||uidapi.com^ ! Unified ID / TradeDesk
+||ttd Rtx.com^ ! The Trade Desk
+||adsrvr.org^ ! The Trade Desk
+|| tremorhub.com^ ! Tremor Video
+||stickyadstv.com^ ! FreeWheel / Comcast
+||freewheel.tv^
+||simpli.fi^
+||acuityplatform.com^
+||ipredictive.com^
+||zemanta.com^ ! Outbrain/Zemanta
+||mgid.com^
+||revcontent.com^
+||connatix.com^
+||jwplayer.com^ ! Often includes analytics/ads
+||jwplatform.com^ ! Often includes analytics/ads
+||jwpsrv.com^ ! JW Player CDN, can be linked to ads/tracking
+||brightcove.com^ ! Video platform, often with analytics/ads
+||brightcove.net^
+||ooyala.com^
+||kaltura.com^
+||trustarc.com^ ! Cookie consent, but can load trackers
+||onetrust.com^ ! Cookie consent, but can load trackers
+||cookielaw.org^ ! Part of OneTrust
+||evidon.com^ ! Crownpeak/Evidon TagControl
+||tagcommander.com^
+||piwik.pro^
+||matomo.cloud^
+||analytical.info^ ! Common alias for Matomo/Piwik
+||yahooapis.com^ ! Can be used for tracking
+||yimg.com^ ! Yahoo assets, can include tracking pixels
+||yldmgrimg.net^ ! AppNexus/Yieldmanager related
+||adtechus.com^ ! AOL/Verizon Adtech
+||adtech.de^
+||advertising.yahoo.com^
+||atdmt.com^ ! Atlas Solutions / Facebook
+||fbmessenger.com^$domain=~facebook.com|~messenger.com
+||whatsapp.com^$domain=~whatsapp.com
+||whatsapp.net^$domain=~whatsapp.com
+||instagram.com^$domain=~instagram.com
+||googlevideo.com^ ! Often used for YT ads, but blocking may break embedded YT
+||doubleverify.com^ ! Ad verification, can track
+||moatads.com^ ! Moat/Oracle Ad Verification, can track
+||iasds01.com^ ! Integral Ad Science, can track
+||integralads.com^
+||sitescout.com^
+||bidtellect.com^
+||gumgum.com^
+||mfadsrvr.com^ ! MediaForge / Rakuten
+||steelhousemedia.com^
+||zdassets.com^ ! Zendesk assets, sometimes used with tracking
+||uservoice.com^ ! Feedback/support, can include analytics
+||intercom.io^ ! Customer messaging, includes analytics
+||intercomcdn.com^
+||drift.com^ ! Conversational marketing, includes analytics
+||cloudflareinsights.com^ ! Cloudflare analytics - specific endpoint
+||googleoptimize.com^ ! Google Optimize A/B testing
+||hubspot.com^$domain=~hubspot.com ! Block Hubspot tracking outside their domain
+||hs-analytics.net^ ! Hubspot Analytics
+||hsadspixel.net^ ! Hubspot Ads Pixel
+||hs-scripts.com^ ! Hubspot scripts
+||liveperson.net^ ! Live chat / Conversational AI
+||lpcdn.lpsnmedia.net^ ! LivePerson CDN
+||decibelinsight.net^ ! Medallia Decibel (Session replay/analytics)
+||medallia.com^ ! Surveys/Feedback, includes analytics
+||qualtrics.com^ ! Surveys/XM, includes analytics
+||surveymonkey.com^ ! Surveys, includes analytics
+||typeform.com^ ! Forms/Surveys, includes analytics
+||pardot.com^ ! Salesforce Marketing Automation
+||exacttarget.com^ ! Salesforce Marketing Cloud
+||salesforce.com^$domain=~salesforce.com ! Block Salesforce tracking outside their domain
+||marketo.com^ ! Adobe Marketo Engage
+||mktoresp.com^ ! Marketo related
+||eloqua.com^ ! Oracle Eloqua Marketing Automation
+||responsys.net^ ! Oracle Responsys Marketing Cloud
+||sail-horizon.com^ ! Sailthru / Campaign Monitor
+||sailthru.com^
+||bouncepilot.com^
+||dynamicyield.com^ ! Dynamic Yield / Mastercard
+||dyntrk.com^ ! Dynamic Yield
