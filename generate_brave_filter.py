@@ -1,13 +1,35 @@
-! Title: Custom Brave Filter List (Prioritized from DDG TDS)
-! Description: Automatically generated list of ~200 tracking/ad domains based on DuckDuckGo TDS (extension-mv3-tds.json structure). Prioritized by category and prevalence. Excludes known CDNs and potential site breakers.
-! Source: extension-mv3-tds.json (structure from https://raw.githubusercontent.com/duckduckgo/tracker-blocklists/refs/heads/main/web/v6/extension-mv3-tds.json)
-! Updated: 2025-04-17 12:17:33 
-! Domain Count: 200
-!
-! WARNING: Use at your own risk. While efforts were made to avoid breaking sites, some breakage is always possible with filter lists.
-!-------------------------------------------------------------------
+#!/usr/bin/env python3
+import requests
+import json
+from datetime import datetime
+import os
 
+# --- Konfiguration ---
 
+# Quelle der Tracker-Daten
+SOURCE_URL = "https://raw.githubusercontent.com/duckduckgo/tracker-blocklists/refs/heads/main/web/v6/extension-mv3-tds.json"
+
+# Name der Ausgabe-Filterlistendatei
+OUTPUT_FILE = "brave-custom-filter.txt"
+
+# Maximale Anzahl automatisch zu generierender Domains (zusätzlich zu den manuellen)
+NUM_DOMAINS = 200
+
+# Kategorien, die von der automatischen Generierung ausgeschlossen werden sollen
+# (Basierend auf Kategorien in der extension-mv3-tds.json)
+# Beispiele: "CDN", "Analytics", "Advertising", "Social Network", "Customer Interaction" etc.
+# Passe diese Liste nach Bedarf an. Eine leere Liste schließt keine Kategorien aus.
+# Wir starten mal konservativ und schließen nur CDNs aus, die oft für Funktionalität gebraucht werden.
+EXCLUDED_CATEGORIES = [
+    "CDN",
+    # Füge hier weitere Kategorien hinzu, die du ausschließen möchtest, z.B.:
+    # "Embedded Content", # Kann manchmal Seiten beschädigen
+    # "Online Payment", # Vorsicht bei Zahlungsanbietern
+]
+
+# Manuell definierte Regeln (wird immer am Anfang der Liste eingefügt)
+# Exakt kopiert aus deinem ursprünglichen Beispiel
+MANUAL_RULES = """
 ! --- Manually added rules for major platforms (blocking off-site tracking) ---
 ||connect.facebook.net^
 ||facebook.com^$domain=~facebook.com|~fb.com|~fbcdn.net|~messenger.com|~instagram.com|~whatsapp.com
@@ -33,205 +55,117 @@
 ||pinterest.com^$domain=~pinterest.com|~pinimg.com
 ||bat.bing.com^
 ||ads.microsoft.com^
+""".strip().split('\n') # Als Liste von Strings speichern
 
-! --- Automatically generated rules (Top {len(top_domains)} prioritized) ---
-||pubads.g.doubleclick.net^
-||securepubads.g.doubleclick.net^
-||doubleclick.net^
-||g.doubleclick.net^
-||google-analytics.com^
-||googlesyndication.com^
-||pagead2.googlesyndication.com^
-||acdn.adnxs.com^
-||adnxs.com^
-||ib.adnxs.com^
-||adsrvr.org^
-||bing.com^
-||micro.rubiconproject.com^
-||rubiconproject.com^
-||tapad.com^
-||pubmatic.com^
-||yahoo.com^
-||casalemedia.com^
-||rlcdn.com^
-||criteo.com^
-||openx.net^
-||ad.crwdcntrl.net^
-||crwdcntrl.net^
-||amazon-adsystem.com^
-||bidswitch.net^
-||stackadapt.com^
-||3lift.com^
-||liadm.com^
-||smartadserver.com^
-||turn.com^
-||lijit.com^
-||demdex.net^
-||id5-sync.com^
-||1rx.io^
-||33across.com^
-||sharethrough.com^
-||creativecdn.com^
-||bidr.io^
-||adform.net^
-||media.net^
-||contextual.media.net^
-||contextweb.com^
-||outbrain.com^
-||simpli.fi^
-||dotomi.com^
-||ipredictive.com^
-||quantserve.com^
-||unrulymedia.com^
-||pippio.com^
-||sitescout.com^
-||thrtle.com^
-||zemanta.com^
-||agkn.com^
-||gumgum.com^
-||yieldmo.com^
-||sonobi.com^
-||smaato.net^
-||rfihub.com^
-||360yield.com^
-||googleadservices.com^
-||stickyadstv.com^
-||loopme.me^
-||teads.tv^
-||postrelease.com^
-||deepintent.com^
-||taboola.com^
-||criteo.net^
-||semasio.net^
-||intentiq.com^
-||2mdn.net^
-||mathtag.com^
-||mediavine.com^
-||kargo.com^
-||indexww.com^
-||adentifi.com^
-||tynt.com^
-||mfadsrvr.com^
-||omnitagjs.com^
-||eyeota.net^
-||undertone.com^
-||exelator.com^
-||mookie1.com^
-||w55c.net^
-||imrworldwide.com^
-||secure-drm.imrworldwide.com^
-||ads-twitter.com^
-||socdm.com^
-||klaviyo.com^
-||t.co^
-||tremorhub.com^
-||adsafeprotected.com^
-||static.adsafeprotected.com^
-||adobedtm.com^
-||assets.adobedtm.com^
-||rkdms.com^
-||bfmio.com^
-||ib-ibi.com^
-||googletagservices.com^
-||adkernel.com^
-||technoratimedia.com^
-||rqtrk.eu^
-||flashtalking.com^
-||ml314.com^
-||betweendigital.com^
-||snow.com.ssl.d2.sc.omtrdc.net^
-||tt.omtrdc.net^
-||omtrdc.net^
-||adthrive.com^
-||tribalfusion.com^
-||mxptint.net^
-||media6degrees.com^
-||app.hubspot.com^
-||hubspot.com^
-||forms.hubspot.com^
-||emxdgt.com^
-||sc-static.net^
-||bttrack.com^
-||sharethis.com^
-||blismedia.com^
-||doubleverify.com^
-||money.yandex.ru^
-||static-maps.yandex.ru^
-||geocode-maps.yandex.ru^
-||frontend.vh.yandex.ru^
-||img-fotki.yandex.ru^
-||pay.yandex.ru^
-||api-maps.yandex.ru^
-||yandex.ru^
-||ctnsnet.com^
-||adroll.com^
-||adgrx.com^
-||acuityplatform.com^
-||static.addtoany.com^
-||addtoany.com^
-||attn.tv^
-||chartbeat.com^
-||appier.net^
-||company-target.com^
-||pro-market.net^
-||tags.tiqcdn.com^
-||tiqcdn.com^
-||hsadspixel.net^
-||segment.com^
-||revcontent.com^
-||yotpo.com^
-||admedo.com^
-||e-planning.net^
-||skimresources.com^
-||adition.com^
-||segment.io^
-||mgid.com^
-||clickagy.com^
-||admixer.net^
-||marketo.net^
-||mktoresp.com^
-||dwin1.com^
-||cpx.to^
-||bounceexchange.com^
-||tvsquared.com^
-||springserve.com^
-||cdn-images.mailchimp.com^
-||mailchimp.com^
-||gallery.mailchimp.com^
-||creative-serving.com^
-||adlightning.com^
-||securedvisit.com^
-||ezoic.net^
-||sundaysky.com^
-||dtscout.com^
-||owneriq.net^
-||storygize.net^
-||sail-horizon.com^
-||ak.sail-horizon.com^
-||tealiumiq.com^
-||tsyndicate.com^
-||trackcmp.net^
-||cxense.com^
-||img.en25.com^
-||en25.com^
-||ntv.io^
-||basis.net^
-||ispot.tv^
-||eloqua.com^
-||igodigital.com^
-||pardot.com^
-||go.pardot.com^
-||impactradius-event.com^
-||affec.tv^
-||cdn.blueconic.net^
-||blueconic.net^
-||cdn.listrakbi.com^
-||listrakbi.com^
-||adswizz.com^
-||weborama.fr^
-||truoptik.com^
-||sascdn.com^
-||nexus.ensighten.com^
-||ensighten.com^
-||quora.com^
-||yahoo.co.jp^
+# --- Hilfsfunktionen ---
+
+def fetch_tds_data(url):
+    """Lädt die TDS JSON-Daten von der angegebenen URL."""
+    try:
+        print(f"Fetching tracker data from URL: {url}...")
+        response = requests.get(url, timeout=20) # Timeout erhöht
+        response.raise_for_status() # Prüft auf HTTP-Fehler
+        print("Tracker data downloaded successfully.")
+        return response.json()
+    except requests.exceptions.Timeout:
+        print(f"Error: Timeout while fetching data from {url}")
+        return None
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching data from URL: {e}")
+        return None
+    except json.JSONDecodeError:
+        print("Error: Failed to parse JSON data from response.")
+        return None
+
+def generate_filter_list(tds_data, manual_rules, excluded_categories, num_domains):
+    """Generiert den Inhalt der Filterliste."""
+    if not tds_data or 'trackers' not in tds_data:
+        print("Error: Invalid or missing tracker data.")
+        return None
+
+    generated_domains = set()
+    print(f"Processing trackers. Excluding categories: {excluded_categories}")
+
+    # Gehe durch die Tracker-Domains im TDS-Datensatz
+    for domain, tracker_info in tds_data.get('trackers', {}).items():
+        if len(generated_domains) >= num_domains:
+            print(f"Reached target number of {num_domains} domains.")
+            break
+
+        # Überspringe Domains ohne Info oder Domain-Namen (sollte nicht vorkommen)
+        if not tracker_info or not domain:
+            continue
+
+        # Prüfe auf ausgeschlossene Kategorien
+        categories = tracker_info.get('categories', [])
+        if any(cat in excluded_categories for cat in categories):
+            # print(f"Skipping {domain} due to excluded category: {categories}")
+            continue
+
+        # Füge die Domain zur Liste hinzu (Set verhindert Duplikate)
+        generated_domains.add(domain)
+
+    print(f"Collected {len(generated_domains)} domains for automatic rules.")
+
+    # Konvertiere Domains in ABP-Regeln und sortiere sie alphabetisch
+    generated_rules = sorted([f"||{domain}^" for domain in generated_domains])
+
+    # Erstelle den Header
+    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    header = f"""! Title: Custom Brave Filter List (Prioritized from DDG TDS)
+! Description: Automatically generated list of ~{len(generated_rules)} tracking/ad domains based on DuckDuckGo TDS (extension-mv3-tds.json structure). Prioritized by selecting top eligible entries. Excludes categories: {', '.join(excluded_categories) if excluded_categories else 'None'}.
+! Source: {SOURCE_URL} (structure based on TDS)
+! Updated: {now}
+! Domain Count (automatically generated): {len(generated_rules)}
+!
+! WARNING: Use at your own risk. While efforts were made to avoid breaking sites, some breakage is always possible with filter lists.
+!-------------------------------------------------------------------
+"""
+
+    # Kombiniere Header, manuelle Regeln und generierte Regeln
+    # Füge Leerzeilen zur besseren Lesbarkeit ein
+    full_list_content = header + "\n" + \
+                        "\n".join(MANUAL_RULES) + "\n\n" + \
+                        f"! --- Automatically generated rules (Top {len(generated_rules)} prioritized, excluding certain categories) ---\n" + \
+                        "\n".join(generated_rules)
+
+    return full_list_content
+
+def write_filter_list(content, filename):
+    """Schreibt den Inhalt in die angegebene Datei."""
+    try:
+        with open(filename, 'w', encoding='utf-8') as f:
+            f.write(content)
+        print(f"Successfully wrote filter list to: {os.path.abspath(filename)}")
+        return True
+    except IOError as e:
+        print(f"Error writing filter list to file {filename}: {e}")
+        return False
+
+# --- Hauptlogik ---
+
+def main():
+    """Hauptfunktion des Skripts."""
+    print("Starting filter list generation...")
+
+    # 1. Daten holen
+    tds_data = fetch_tds_data(SOURCE_URL)
+    if not tds_data:
+        print("Failed to fetch tracker data. Exiting.")
+        return # Beenden, wenn Daten nicht geladen werden können
+
+    # 2. Filterliste generieren
+    filter_content = generate_filter_list(tds_data, MANUAL_RULES, EXCLUDED_CATEGORIES, NUM_DOMAINS)
+    if not filter_content:
+        print("Failed to generate filter list content. Exiting.")
+        return # Beenden bei Fehler
+
+    # 3. Filterliste in Datei schreiben
+    write_filter_list(filter_content, OUTPUT_FILE)
+
+    print("Filter list generation finished.")
+
+# --- Skriptausführung ---
+
+if __name__ == "__main__":
+    main()
