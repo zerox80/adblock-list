@@ -13,22 +13,16 @@ SOURCE_URL = "https://raw.githubusercontent.com/duckduckgo/tracker-blocklists/re
 OUTPUT_FILE = "brave-custom-filter.txt"
 
 # Maximale Anzahl automatisch zu generierender Domains (zusätzlich zu den manuellen)
+# <<<< HIER WIRD DIE BEGRENZUNG AKTIVIERT >>>>
 NUM_DOMAINS = 200
 
 # Kategorien, die von der automatischen Generierung ausgeschlossen werden sollen
 # (Basierend auf Kategorien in der extension-mv3-tds.json)
-# Beispiele: "CDN", "Analytics", "Advertising", "Social Network", "Customer Interaction" etc.
-# Passe diese Liste nach Bedarf an. Eine leere Liste schließt keine Kategorien aus.
-# Wir starten mal konservativ und schließen nur CDNs aus, die oft für Funktionalität gebraucht werden.
 EXCLUDED_CATEGORIES = [
     "CDN",
-    # Füge hier weitere Kategorien hinzu, die du ausschließen möchtest, z.B.:
-    # "Embedded Content", # Kann manchmal Seiten beschädigen
-    # "Online Payment", # Vorsicht bei Zahlungsanbietern
 ]
 
 # Manuell definierte Regeln (wird immer am Anfang der Liste eingefügt)
-# Exakt kopiert aus deinem ursprünglichen Beispiel
 MANUAL_RULES = """
 ! --- Manually added rules for major platforms (blocking off-site tracking) ---
 ||connect.facebook.net^
@@ -63,8 +57,8 @@ def fetch_tds_data(url):
     """Lädt die TDS JSON-Daten von der angegebenen URL."""
     try:
         print(f"Fetching tracker data from URL: {url}...")
-        response = requests.get(url, timeout=20) # Timeout erhöht
-        response.raise_for_status() # Prüft auf HTTP-Fehler
+        response = requests.get(url, timeout=20)
+        response.raise_for_status()
         print("Tracker data downloaded successfully.")
         return response.json()
     except requests.exceptions.Timeout:
@@ -85,12 +79,17 @@ def generate_filter_list(tds_data, manual_rules, excluded_categories, num_domain
 
     generated_domains = set()
     print(f"Processing trackers. Excluding categories: {excluded_categories}")
+    print(f"Targeting approximately {num_domains} automatically generated domains.") # Info hinzugefügt
 
     # Gehe durch die Tracker-Domains im TDS-Datensatz
     for domain, tracker_info in tds_data.get('trackers', {}).items():
+        
+        # --- HIER IST DIE WIEDER EINGEFÜGTE BEGRENZUNG ---
+        # Prüfe, ob das Limit erreicht ist, BEVOR die aktuelle Domain verarbeitet wird
         if len(generated_domains) >= num_domains:
             print(f"Reached target number of {num_domains} domains.")
             break
+        # --- ENDE DER BEGRENZUNG ---
 
         # Überspringe Domains ohne Info oder Domain-Namen (sollte nicht vorkommen)
         if not tracker_info or not domain:
@@ -105,28 +104,36 @@ def generate_filter_list(tds_data, manual_rules, excluded_categories, num_domain
         # Füge die Domain zur Liste hinzu (Set verhindert Duplikate)
         generated_domains.add(domain)
 
-    print(f"Collected {len(generated_domains)} domains for automatic rules.")
+    # Falls die Schleife durchläuft, ohne das Limit zu erreichen
+    if len(generated_domains) < num_domains:
+         print(f"Collected {len(generated_domains)} domains (fewer than target due to source size or exclusions).")
+    else:
+         # Diese Meldung wird jetzt nur noch angezeigt, wenn das Limit NICHT durch break erreicht wurde
+         # Normalerweise wird die Meldung "Reached target number..." angezeigt.
+         print(f"Collected {len(generated_domains)} domains for automatic rules.")
+
 
     # Konvertiere Domains in ABP-Regeln und sortiere sie alphabetisch
     generated_rules = sorted([f"||{domain}^" for domain in generated_domains])
 
     # Erstelle den Header
+    # Verwende die tatsächliche Anzahl generierter Domains im Header
+    actual_generated_count = len(generated_rules)
     now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     header = f"""! Title: Custom Brave Filter List (Prioritized from DDG TDS)
-! Description: Automatically generated list of ~{len(generated_rules)} tracking/ad domains based on DuckDuckGo TDS (extension-mv3-tds.json structure). Prioritized by selecting top eligible entries. Excludes categories: {', '.join(excluded_categories) if excluded_categories else 'None'}.
+! Description: Automatically generated list of ~{actual_generated_count} tracking/ad domains based on DuckDuckGo TDS (extension-mv3-tds.json structure). Prioritized by selecting top eligible entries. Excludes categories: {', '.join(excluded_categories) if excluded_categories else 'None'}. Target ~{num_domains}.
 ! Source: {SOURCE_URL} (structure based on TDS)
 ! Updated: {now}
-! Domain Count (automatically generated): {len(generated_rules)}
+! Domain Count (automatically generated): {actual_generated_count}
 !
 ! WARNING: Use at your own risk. While efforts were made to avoid breaking sites, some breakage is always possible with filter lists.
 !-------------------------------------------------------------------
 """
 
     # Kombiniere Header, manuelle Regeln und generierte Regeln
-    # Füge Leerzeilen zur besseren Lesbarkeit ein
     full_list_content = header + "\n" + \
                         "\n".join(MANUAL_RULES) + "\n\n" + \
-                        f"! --- Automatically generated rules (Top {len(generated_rules)} prioritized, excluding certain categories) ---\n" + \
+                        f"! --- Automatically generated rules (Top {actual_generated_count} prioritized, excluding certain categories) ---\n" + \
                         "\n".join(generated_rules)
 
     return full_list_content
@@ -152,13 +159,13 @@ def main():
     tds_data = fetch_tds_data(SOURCE_URL)
     if not tds_data:
         print("Failed to fetch tracker data. Exiting.")
-        return # Beenden, wenn Daten nicht geladen werden können
+        return
 
     # 2. Filterliste generieren
     filter_content = generate_filter_list(tds_data, MANUAL_RULES, EXCLUDED_CATEGORIES, NUM_DOMAINS)
     if not filter_content:
         print("Failed to generate filter list content. Exiting.")
-        return # Beenden bei Fehler
+        return
 
     # 3. Filterliste in Datei schreiben
     write_filter_list(filter_content, OUTPUT_FILE)
